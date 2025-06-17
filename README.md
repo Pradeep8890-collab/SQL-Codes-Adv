@@ -9,6 +9,9 @@ Author - Pradeep
     covering real-world scenarios and practical use cases. Each question is followed by a sample 
     SQL script, designed to help you prepare for technical interviews or enhance your SQL expertise.
 
+## Dateset:
+    Data for this scenario is sourced from the AdventureWorks dataset
+    
 ## How to Use:
     Each scenario is presented in a question-and-answer format. The SQL scripts provided are designed
     to run on most standard SQL platforms (PostgreSQL, MySQL, SQL Server, SQLite with minor adjustments).
