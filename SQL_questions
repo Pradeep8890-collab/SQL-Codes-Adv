@@ -1,3 +1,9 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Basic and Advance SQL questions
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Q1 - Write a SQL query to find sales greater than 60K for 3 consecutive days
+
 use AdventureWorksDW2022
 ;with CTE1 as -- aggregate sales and select greater than 60K
 (
@@ -56,3 +62,4 @@ select
 from
 CTE5
 where ct > 2;
+
