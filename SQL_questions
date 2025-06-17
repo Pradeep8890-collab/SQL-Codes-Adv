@@ -1,74 +1,63 @@
-====================================================================================================================
-# Basic and Advance SQL questions
 
-## Script Purpose:
-    This repository contains a curated set of advanced-level SQL interview questions and answers,
-    covering real-world scenarios and practical use cases. Each question is followed by a sample 
-    SQL script, designed to help you prepare for technical interviews or enhance your SQL expertise.
-
-## How to Use:
-    Each scenario is presented in a question-and-answer format. The SQL scripts provided are designed
-    to run on most standard SQL platforms (PostgreSQL, MySQL, SQL Server, SQLite with minor adjustments).
-
-====================================================================================================================
 **Q1** - Write a SQL query to find sales greater than 60K for 3 consecutive days
 
 use AdventureWorksDW2022
-;with CTE1 as -- aggregate sales and select greater than 60K
+;with CTE1 as -- aggregate sales on a given day and filter by amount greater than 60K
 (
-select
-orderdate,
-sum(SalesAmount) tot_sal
-from FactInternetSales
-group by OrderDate
-having datename(year,OrderDate) = 2013 and sum(SalesAmount) > 60000
+    select
+    orderdate,
+    sum(SalesAmount) tot_sal
+    from FactInternetSales
+    group by OrderDate
+    having datename(year,OrderDate) = 2013 and sum(SalesAmount) > 60000
 ), CTE2 as -- finding consecutive days based on order dates using lag function
 (
-select
-*,
-lag(orderdate,1) over(order by orderdate) as prev_date,
-DATEDIFF(day, lag(orderdate,1) over(order by orderdate), OrderDate) as day_diff,
-ROW_NUMBER() over(order by orderdate) as rn
-from
-CTE1
+    select
+    *,
+    lag(orderdate,1) over(order by orderdate) as prev_date,
+    DATEDIFF(day, lag(orderdate,1) over(order by orderdate), OrderDate) as day_diff,
+    ROW_NUMBER() over(order by orderdate) as rn
+    from
+    CTE1
 ), CTE3 as -- adding a cases statement select the consecutive days
 (
-select
-orderdate,
-tot_sal,
-day_diff,
-rn,
-case
-when day_diff = 1 then 'Include'
-else 'exclude'
-end inc_flag
-from
-CTE2
+    select
+    orderdate,
+    tot_sal,
+    day_diff,
+    rn,
+    case
+    when day_diff = 1 then 'Include'
+    else 'exclude'
+    end inc_flag
+    from
+    CTE2
 ), CTE4 as
 (
-select * from -- giving condition where Include flag gets fulfilled in two columns
-(select -- use lead function to get the previous day included
-*,
-lead(inc_flag,1) over(order by orderdate) as prev_date_flag
-from
-CTE3) sq1
-where inc_flag = 'Include' or prev_date_flag = 'Include'
+    select * from -- giving condition where Include flag gets fulfilled in two columns
+        (select -- use lead function to get the previous day included
+        *,
+        lead(inc_flag,1) over(order by orderdate) as prev_date_flag
+        from
+        CTE3) sq1
+        where inc_flag = 'Include' or prev_date_flag = 'Include'
 ), CTE5 as -- adding a new row number, creating a group based on row number and counting group
 (
-select
-*,
-count(*) over(partition by rn_diff) as ct
-from
-(select
-*,
-ROW_NUMBER() over(order by orderdate) as rn1,
-rn - ROW_NUMBER() over(order by orderdate) as rn_diff
-from
-CTE4) sq2
+    select
+    *,
+    count(*) over(partition by rn_diff) as ct
+    from
+        (select
+        *,
+        ROW_NUMBER() over(order by orderdate) as rn1,
+        rn - ROW_NUMBER() over(order by orderdate) as rn_diff
+        from
+        CTE4) sq2
 ) -- additional condition
 select
 *
 from
 CTE5
 where ct > 2;
+
 
