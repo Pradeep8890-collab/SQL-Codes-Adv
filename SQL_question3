@@ -1,4 +1,4 @@
-Write a SQL query to display the split of SalesTerritory wise sales with rows as SalesTerritory and columns as year of sales
+Write a SQL query to display the split of SalesTerritory wise sales with rows as SalesTerritory and columns as year of sales (pivot table)
 
 use AdventureWorksDW2022
 select
