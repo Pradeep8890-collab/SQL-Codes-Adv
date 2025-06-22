@@ -1,0 +1,18 @@
+**Q2** - Write a SQL query to find the days where any days sale is greater than previous days sale
+
+use AdventureWorksDW2022
+; with CTE1 as
+(
+select
+OrderDate,
+sum(SalesAmount) as tot_sal
+from FactInternetSales
+group by OrderDate
+)
+select * from
+(select
+*,
+lead(tot_sal) over(order by orderdate) as nxt_sale
+from
+CTE1) sq1
+where nxt_sale > tot_sal;
