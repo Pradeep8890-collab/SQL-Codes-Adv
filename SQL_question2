@@ -3,16 +3,16 @@
 use AdventureWorksDW2022
 ; with CTE1 as
 (
-select
-OrderDate,
-sum(SalesAmount) as tot_sal
-from FactInternetSales
-group by OrderDate
+  select
+  OrderDate,
+  sum(SalesAmount) as tot_sal
+  from FactInternetSales
+  group by OrderDate
 )
 select * from
-(select
-*,
-lead(tot_sal) over(order by orderdate) as nxt_sale
-from
-CTE1) sq1
+  (select
+  *,
+  lead(tot_sal) over(order by orderdate) as nxt_sale
+  from
+  CTE1) sq1
 where nxt_sale > tot_sal;
