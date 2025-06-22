@@ -1,0 +1,28 @@
+Write a SQL query to find department that has more than 2 married Male employees
+use AdventureWorksDW2022
+; with CTE1 as
+(
+  select
+  DepartmentName,
+  EmployeeKey,
+  Gender,
+  MaritalStatus
+  from DimEmployee
+), CTE2 as
+(
+  select * from
+  (select
+  *,
+  Case
+  when Gender = 'M' and MaritalStatus = 'M' then 1 else 0 end flag1
+  from
+  CTE1) sq1
+  where flag1 = 1
+)
+  select * from
+  (select
+  *,
+  count(*) over(partition by departmentname) as ct
+  from
+  CTE2) sq2
+  where ct > 2;
