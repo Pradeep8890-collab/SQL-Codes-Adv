@@ -2,10 +2,10 @@ Write a SQL query to display the split of SalesTerritory wise sales with rows as
 
 use AdventureWorksDW2022
 select
-SalesTerritoryKey,
-sum( case when year(orderdate) = '2010' then SalesAmount else 0 end) as sales_2010,
-sum( case when year(orderdate) = '2011' then SalesAmount else 0 end) as sales_2011,
-sum( case when year(orderdate) = '2012' then SalesAmount else 0 end) as sales_2012
+  SalesTerritoryKey,
+  sum( case when year(orderdate) = '2010' then SalesAmount else 0 end) as sales_2010,
+  sum( case when year(orderdate) = '2011' then SalesAmount else 0 end) as sales_2011,
+  sum( case when year(orderdate) = '2012' then SalesAmount else 0 end) as sales_2012
 from FactInternetSales
-group by SalesTerritoryKey
-order by SalesTerritoryKey;
+  group by SalesTerritoryKey
+  order by SalesTerritoryKey;
