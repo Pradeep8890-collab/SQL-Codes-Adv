@@ -1,0 +1,22 @@
+Write a SQL query to swap the department of employees using Lead and Lag function
+
+use AdventureWorksDW2022
+;With CTE1 as
+(
+	select
+	EmployeeKey,
+	EmailAddress,
+	DepartmentName,
+	ROW_NUMBER() over(order by (select null)) as rn -- generte row noumber without any condition
+	from DimEmployee
+)
+	select
+	*,
+	--lead(DepartmentName,1) over(order by rn) as new_department1,
+	--lag(DepartmentName,1) over(order by rn) as new_department2,
+  		Case
+  		when rn%2=1 then lead(DepartmentName,1,DepartmentName) over(order by rn)--display department when row number is odd
+  		when rn%2=0 then lead(DepartmentName,1,DepartmentName) over(order by rn)--display department when row number is even
+		end as new_department3
+from
+CTE1;
