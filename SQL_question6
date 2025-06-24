@@ -1,0 +1,13 @@
+use AdventureWorksDW2022
+;with CTE1 as
+(
+  select
+  EmployeeKey,
+  EmailAddress,
+  departmentname,
+  baserate,
+  count(*) over(partition by departmentname, baserate order by baserate) as total_ct -- display the count based on data partition
+  from
+  dimemployee
+)
+select * from CTE1 where total_ct > 1;
