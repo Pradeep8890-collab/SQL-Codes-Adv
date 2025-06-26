@@ -1,0 +1,14 @@
+Write a SQL query to find department wise top 2 salaries
+Note - we are just taking top 2 salaries irrespective of if they are repeated or not
+
+; with CTE1 as
+  (
+  select
+  EmployeeKey,
+  DepartmentName,
+  BaseRate,
+  row_number() over(partition by DepartmentName order by BaseRate desc) as rn
+  from
+  dimemployee
+)
+select * from CTE1 where rn < 3;
