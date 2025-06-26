@@ -1,0 +1,38 @@
+Write a SQL query to find the maximum gap or window period in order of a particular product in a particular period of time year or month.
+Note - You can use your own period as per desired result
+
+use AdventureWorksDW2022
+; with CTE1 as -- filter the period you are interested to display the result
+(
+select
+ProductKey,
+datetrunc(DAY,orderdate) as dt,
+year(orderdate) as yr,
+datename(month,orderdate) as mth,
+SalesAmount
+from FactInternetSales
+where year(OrderDate) = '2014'
+), CTE2 as -- use lead function to calcualte the date difference or gap
+(
+select
+ProductKey,
+dt,
+lead(dt,1,dt) over(partition by productkey order by dt) as ld_dt -- you can choose any other value for the Null results
+from
+CTE1
+), CTE3 as -- calculating date difference
+(
+select
+*,
+DATEDIFF(day,dt,ld_dt) as dt_df 
+from
+CTE2
+)
+select * from
+(select
+*,
+rank() over(partition by productkey order by dt_df desc) as rnk --rank the date difference
+from
+CTE3) sq1
+where rnk =1
+
