@@ -1,0 +1,20 @@
+Write a SQL query to display department wise salary of employees where the salaries are not same or where salaries are same
+
+use AdventureWorksDW2022
+; with CTE1 as
+(
+  select
+  EmployeeKey,
+  DepartmentName,
+  BaseRate,
+  count(*) over(partition by DepartmentName order by BaseRate) as rnk
+  from
+  dimemployee
+)
+select * from
+  (select
+  *,
+  count(*) over(partition by DepartmentName, rnk order by BaseRate) as ct1
+  from
+  CTE1) sq1
+where ct1 = 1;
