@@ -1,0 +1,23 @@
+Write a SQL query to calculate running total of sales for a particular period of time.
+Note - you can define period based on your requirement
+
+use AdventureWorksDW2022
+; with CTE1 as -- filter the period you are interested to display the result
+(
+select
+datetrunc(DAY,orderdate) as dt,
+SalesAmount
+from FactInternetSales
+where year(OrderDate) = '2014'
+), CTE2 as
+(
+select
+dt,
+sum(SalesAmount) as total_sal
+from CTE1
+group by dt
+)
+select
+*,
+sum(total_sal) over(order by dt) as runn_total 
+from CTE2;
