@@ -1,0 +1,17 @@
+Write a SQL query to display department wise median tenure of Employees
+
+use AdventureWorksDW2022
+;with CTE1 as
+(
+select EmployeeKey, departmentname, StartDate, EndDate, CAST('2013-12-31' as date) as Enddate_ref
+from DimEmployee
+where EndDate is null
+), CTE2 as
+(
+Select EmployeeKey, departmentname,
+DATEDIFF(month, StartDate, Enddate_ref) as diff_dt
+from CTE1
+)
+select distinct DepartmentName,
+AVG(diff_dt) over(partition by departmentname) as avg_exp
+from CTE2;
