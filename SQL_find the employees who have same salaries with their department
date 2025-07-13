@@ -1,4 +1,4 @@
-Write a SQL query for find the employees who have same salaries with their department
+Write a SQL query to find the employees who have same salaries with their department
 
 use AdventureWorksDW2022
 ;with CTE1 as
