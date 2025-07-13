@@ -1,0 +1,8 @@
+-- query to check and display the completeness of the data i.e if there are any missing values
+use AdventureWorksDW2022
+select
+count(8) as total_rows,-- displays total no of rows in the dataset
+sum(case when EmailAddress is null then 1 else 0 end) as ct_email_miss,-- displays rows without email address
+sum(case when MiddleName is null then 1 else 0 end) as ct_mdle_miss,-- displays rows without middle name
+sum(case when Gender is null then 1 else 0 end) as ct_mdle_miss -- displays rows without Gender
+from DimEmployee;
